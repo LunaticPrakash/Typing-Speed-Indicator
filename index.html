@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Indicator</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Ubuntu&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS file -->
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+    <h1 class="main-heading">Typing Speed Indicator</h1>
+
+    <!-- Timer Section -->
+    <section id="timer">
+        <div class="flex-box-container">
+
+            <div id="wpm-box-div" class="box ahidden">
+                <div class="box-heading">WPM</div>
+                <div class="box-text" id="wpm">0</div>
+            </div>
+
+            <div class="box">
+                <div class="box-heading">Error</div>
+                <div class="box-text" id="error">0</div>
+            </div>
+
+            <div class="box">
+                <div class="box-heading">Time</div>
+                <div class="box-text" id="time">10</div>
+            </div>
+
+            <div class="box">
+                <div class="box-heading">Accuracy</div>
+                <div class="box-text" id="accuracy">100%</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Given Quotes Section -->
+    <section id="words">
+        <div class="given-text-container">
+            <p id="given-text">
+            </p>
+        </div>
+    </section>
+
+    <!-- User Input Section -->
+    <section id="user-input">
+        <textarea id="input-text-area" wrap="off" oninput="getTextFromUser()" name="paragraph_text"
+            placeholder="Start typing here..."></textarea>
+        <div>
+            <button id="restart-btn" class="btn" type='button'>Reset</button>
+        </div>
+    </section>
+
+    <!-- Javascript File-->
+    <script src="scripts.js"></script>
+</body>
+
+</html>
