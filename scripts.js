@@ -1,4 +1,4 @@
-const TIME_LIMIT = 10;
+const TIME_LIMIT = 60;
 let quotes_array = [
     "Push yourself, because no one else is going to do it for you.",
     "Failure is the condiment that gives success its flavor.",
@@ -30,6 +30,7 @@ let curr_input = "";
 let curr_quote = "";
 let quote_count = 0;
 let timer = null;
+let num_valid_char_typed = 0; //doesn't count characters removed via del/backspace
 
 // Will first set given_txt field null(to avoid overwriting)
 // then change it to next quote
@@ -55,7 +56,7 @@ function updateGivenText() {
 // will check whether each character typed is correct or not
 function checkError(input_char_array, ori_char, idx) {
     let typed_char = input_char_array[idx];
-    // errors = 0;
+
     if (typed_char == null) {
         ori_char.classList.remove('correct_char');
         ori_char.classList.remove('incorrect_char');
@@ -75,88 +76,103 @@ function checkError(input_char_array, ori_char, idx) {
 
 function updateTimer() {
     if (time_left > 0) {
-        // decrease the current time left
         time_left--;
-
-        // increase the time elapsed
         time_elapsed++;
-
-        // update the timer text
-        time_txt.textContent = time_left + "s";
+        time_txt.innerText = time_left + "s";
     }
-
     else {
-        resetf();
+        console.log("Time Finished!");
+        finishGame();
     }
-    // else {
-    //     // finish the game
-    //     finishGame();
-    // }
 }
 
 // will read input from user character by character
-function getTextFromUser() {
+function processUserInput() {
 
+    errors = 0;
     character_typed = character_typed + 1;
     // below condition will prevent timer function to get called multiple times
-    // if (game_started == false)
-    //     timer = setInterval(updateTimer, 1000);
+    if (game_started == false)
+        timer = setInterval(updateTimer, 1000);
     game_started = true;
-    
+
     // Read input and extract each character
     curr_input = input_txt_area.value;   // contains everything that user has entered
     let input_char_array = curr_input.split('');
-    let valid_char_typed = input_char_array.length;
+    num_valid_char_typed = input_char_array.length;
+    let curr_typed_char = input_char_array[num_valid_char_typed - 1];
 
-    // if (input_char_array.length > character_typed)
-    //     character_typed = input_char_array.length;
-   
     let given_txt_span_array = given_txt.querySelectorAll("span");
     given_txt_span_array.forEach((item, index) => {
         checkError(input_char_array, item, index)
     });
 
-    // error_txt.innerText = total_errors + errors;
-    // console.log("time_elapsed = " + time_elapsed);
-    // let wpm = (character_typed / time_elapsed) * 60;
-    // wpm_txt.innerText = (wpm / 5).toFixed(0);
-    // let correct_char = input_char_array.length - (total_errors + errors)
-    // if (correct_char < 0)
-    //     correct_char = 0;
-    // // console.log("correct words = " + correct_char);
-    // let curr_accuracy = (correct_char / input_char_array.length) * 100;
-    // if (curr_accuracy % 1 != 0)
-    //     curr_accuracy = curr_accuracy.toFixed(2);
-    // else if (curr_accuracy < 0)
-    //     curr_accuracy = 0;
-    // accuracy_txt.innerText = curr_accuracy + "%";
-    // if (curr_input.length === curr_quote.length) {
-    //     updateGivenText();
-    //     total_errors += errors;
-    //     errors = 0
-    //     input_txt_area.value = "";
+    // displaying stats
+    error_txt.innerText = total_errors + errors;
 
-    // }
+    let wpm = (num_valid_char_typed / time_elapsed) * 60;
+    wpm_txt.innerText = (wpm / 5).toFixed(0);
+
+    let correct_char = input_char_array.length - (total_errors + errors)
+    if (correct_char < 0)
+        correct_char = 0;
+
+    let curr_accuracy = (correct_char / input_char_array.length) * 100;
+    curr_accuracy = Math.abs(curr_accuracy);
+    if (curr_accuracy % 1 != 0) // if it's float
+        curr_accuracy = curr_accuracy.toFixed(2);
+
+    accuracy_txt.innerText = curr_accuracy + "%";
+
+    // when current given quote is typed completely by user
+    if (curr_input.length === curr_quote.length) {
+        updateGivenText();
+        total_errors += errors;
+        // errors = 0
+        input_txt_area.value = "";
+    }
 
 }
 
-function resetf() {
+function startGame() {
+    reset();
+    updateGivenText();
+}
+
+function reset() {
+    if (game_started === true) {
+        clearInterval(timer);
+        game_started = false;
+        time_left = TIME_LIMIT;
+        time_elapsed = 0;
+        total_errors = 0;
+        errors = 0;
+        accuracy = 0;
+        character_typed = 0;
+        curr_input = "";
+        curr_quote = "";
+        timer = null;
+        input_txt_area.disabled = false;
+        input_txt_area.value = "";
+        time_txt.innerText = 10;
+        wpm_txt.innerText = 0;
+        accuracy_txt.innerText = 100;
+        error_txt.innerText = 0;
+        given_txt.innerText = quotes_array[0];
+    }
+    else{
+        quote_count = 0;
+    }
+}
+
+function finishGame() {
+    clearInterval(timer);
+    input_txt_area.disabled = true;
     game_started = false;
-    time_left = TIME_LIMIT;
-    time_elapsed = 0;
-    total_errors = 0;
-    errors = 0;
-    accuracy = 0;
-    character_typed = -1;
-    curr_input = "";
-    curr_quote = "";
-    quote_count = 0;
-    timer = null;
-    input_txt_area.innerText = "";
-
+    given_txt.innerText = "Click on restart to start a new game.";
+    let wpm = (num_valid_char_typed / time_elapsed) * 60;
+    wpm_txt.innerText = (wpm / 5).toFixed(0);
 }
 
-
-updateGivenText();
 
 

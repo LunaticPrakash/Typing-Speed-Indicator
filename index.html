@@ -57,10 +57,10 @@
 
     <!-- User Input Section -->
     <section id="user-input">
-        <textarea id="input-text-area" wrap="off" oninput="getTextFromUser()" name="paragraph_text"
+        <textarea id="input-text-area" wrap="off" oninput="processUserInput()" onfocus="startGame()" name="paragraph_text"
             placeholder="Start typing here..."></textarea>
         <div>
-            <button id="restart-btn" class="btn" type='button'>Reset</button>
+            <button id="restart-btn" class="btn" type='button' onclick="reset()">Reset</button>
         </div>
     </section>
 
