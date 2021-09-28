@@ -1,4 +1,4 @@
-const TIME_LIMIT = 60;
+const TIME_LIMIT = 10;
 let quotes_array = [
     "Push yourself, because no one else is going to do it for you.",
     "Failure is the condiment that gives success its flavor.",
@@ -88,7 +88,8 @@ function updateTimer() {
 
 // will read input from user character by character
 function processUserInput() {
-
+    console.log("errors = ", errors);
+    console.log("total_errors = ", total_errors);
     errors = 0;
     character_typed = character_typed + 1;
     // below condition will prevent timer function to get called multiple times
@@ -140,36 +141,33 @@ function startGame() {
 }
 
 function reset() {
-    if (game_started === true) {
-        clearInterval(timer);
-        game_started = false;
-        time_left = TIME_LIMIT;
-        time_elapsed = 0;
-        total_errors = 0;
-        errors = 0;
-        accuracy = 0;
-        character_typed = 0;
-        curr_input = "";
-        curr_quote = "";
-        timer = null;
-        input_txt_area.disabled = false;
-        input_txt_area.value = "";
-        time_txt.innerText = 10;
-        wpm_txt.innerText = 0;
-        accuracy_txt.innerText = 100;
-        error_txt.innerText = 0;
-        given_txt.innerText = quotes_array[0];
-    }
-    else{
-        quote_count = 0;
-    }
+
+    clearInterval(timer);
+    game_started = false;
+    time_left = TIME_LIMIT;
+    time_elapsed = 0;
+    total_errors = 0;
+    errors = 0;
+    accuracy = 0;
+    character_typed = 0;
+    curr_input = "";
+    curr_quote = "";
+    timer = null;
+    input_txt_area.disabled = false;
+    input_txt_area.value = "";
+    time_txt.innerText = 10;
+    wpm_txt.innerText = 0;
+    accuracy_txt.innerText = 100;
+    error_txt.innerText = 0;
+    given_txt.innerText = quotes_array[0];
+
 }
 
 function finishGame() {
     clearInterval(timer);
     input_txt_area.disabled = true;
     game_started = false;
-    given_txt.innerText = "Click on restart to start a new game.";
+    given_txt.innerText = "Click on reset to start a new game.";
     let wpm = (num_valid_char_typed / time_elapsed) * 60;
     wpm_txt.innerText = (wpm / 5).toFixed(0);
 }
